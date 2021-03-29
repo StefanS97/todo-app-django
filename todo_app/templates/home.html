@@ -1,0 +1,52 @@
+{% extends "base.html"%}
+
+{% block title %}To Dos{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="row mt-3">
+
+        <!-- Show and add items column -->
+        <div class="col-lg-6">
+            <h2 style="text-align: center;" class="mb-4">Ongoing:</h2>
+            {% for item in object_list %}
+                {% if item.done == False %}
+                    <h4>{{ item.title }}
+                        <a style='color: green;' href="{% url 'core:complete' item.id %}">
+                            <i class="fas fa-check"></i>
+                        </a>
+                        <a style='color: red;' href="{% url 'core:delete' item.id %}">
+                            <i class="fas fa-times"></i>
+                        </a>
+                    </h4>
+                {% endif %}
+            {% endfor %}
+            <form method='POST' action="{% url 'core:add' %}">
+                {% csrf_token %}
+                <div class="input-group mb-3 mt-4">
+                    <input type="text" class="form-control" name="title" placeholder="Add new item" aria-label="Add new item" aria-describedby="button-addon2" required>
+                    <button class="btn btn-primary" type="submit" name="submit" id="button-addon2">Add</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Completed column -->
+        <div class="col-lg-6">
+            <h2 class="mb-4 text-center">Completed:</h2>
+            {% for item in object_list %}
+                {% if item.done == True %}
+                    <h4>{{ item.title }}</h4>
+                {% endif %}
+            {% endfor %}
+            <a style='color: red;' href="{% url 'core:clear' %}">
+                <button class="btn btn-danger" type="submit" name="submit" id="button-addon2">Clear all</button>
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
